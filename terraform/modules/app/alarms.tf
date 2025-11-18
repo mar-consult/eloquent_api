@@ -1,5 +1,4 @@
 resource "aws_cloudwatch_metric_alarm" "ecs_service_cpu_utilization" {
-  for_each                  = { for ecs in var.ecs : ecs.name => ecs.cpu_utilization }
   alarm_name                = "${each.key}-${var.environment} CPU Utilization"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = each.value.evaluation_periods

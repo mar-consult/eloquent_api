@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir --upgrade pip==24.0 && \
 
 ENV PORT=8080
 
-RUN apk upgrade libexpat
+RUN apk upgrade libexpat sqlite-libs
 
 WORKDIR /home/app_user
 

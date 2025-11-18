@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "task" {
     image     = var.ecr_url
     essential = true
 
-    volumesFrom = [],
+    environment = var.environment_variables
     portMappings = [
       {
         protocol      = "tcp",

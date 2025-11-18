@@ -121,3 +121,11 @@ variable "allow_ingress_lb_cidr_block" {
   description = "Cidr block to allow connections to enter the ALB"
   type        = list(string)
 }
+
+variable "environment_variables" {
+  description = "Cidr block to allow connections to enter the ALB"
+  type        = list(object({
+    name  = string
+    value = string
+  }))
+}
