@@ -1,0 +1,56 @@
+name: Lookup API
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+      
+      - name: Install Pipenv
+        run: pip install pipenv --user
+
+      - name: Run Lint on code
+        run: make lint
+      
+      - name: Run lint on Dockerfile
+        run: make docker-lint
+  
+  security_checks:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+      
+      - name: Install Pipenv
+        run: pip install pipenv --user
+
+      - name: Run Security Check on code
+        run: make security
+      
+      - name: Build an image
+        run: docker build -t lookup-app:${{ github.sha }} .
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'lookup-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+        
