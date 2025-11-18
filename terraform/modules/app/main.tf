@@ -5,15 +5,6 @@ locals {
   health_check_healthy_threshold   = 2
   health_check_unhealthy_threshold = 5
 
-  log_config_cloudwatch = {
-    logDriver = "awslogs"
-
-    options = {
-      "awslogs-region"        = var.region
-      "awslogs-group"         = aws_cloudwatch_log_group.ecs_log_group.name
-      "awslogs-stream-prefix" = var.service_name
-    }
-  }
 
 }
 

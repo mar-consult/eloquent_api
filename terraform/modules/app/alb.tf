@@ -25,6 +25,14 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   dynamic "default_action" {
+    for_each = var.enable_https_redirection ? [] : [1]
+    content {
+     type             = "forward"
+     target_group_arn = aws_lb_target_group.eloquent.arn 
+    }
+  }
+
+  dynamic "default_action" {
     for_each = var.enable_https_redirection ? [1] : []
     content {
       type = "redirect"
@@ -48,11 +56,7 @@ resource "aws_lb_listener" "https_listener" {
   certificate_arn   = var.certificate_arn
 
   default_action {
-    type = "fixed-response"
-    fixed_response {
-      status_code  = "404"
-      content_type = "text/plain"
-      message_body = "Not Found"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.eloquent.arn 
   }
 }

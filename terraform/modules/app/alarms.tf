@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_metric_alarm" "ecs_service_cpu_utilization" {
-  alarm_name                = "${each.key}-${var.environment} CPU Utilization"
+  alarm_name                = "${var.service_name}-${var.environment} CPU Utilization"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = each.value.evaluation_periods
   metric_name               = "CPUUtilization"
@@ -8,20 +8,17 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_cpu_utilization" {
   statistic                 = "Average"
   threshold                 = each.value.threshold
   alarm_description         = "This alarm is used to detect high CPU utilization for the ECS service. Consistent high CPU utilization can indicate a resource bottleneck or application performance problems."
-  alarm_actions             = local.alarm_notifications
-  ok_actions                = local.ok_notifications
   insufficient_data_actions = []
-  treat_missing_data        = var.treat_missing_data
+  treat_missing_data        = "notBreaching"
   dimensions = {
     ClusterName = var.ecs_cluster_name
-    ServiceName = each.key
+    ServiceName = var.service_name
   }
 }
 
 
 resource "aws_cloudwatch_metric_alarm" "ecs_service_memory_utilization" {
-  for_each                  = { for ecs in var.ecs : ecs.name => ecs.memory_utilization }
-  alarm_name                = "${each.key}-${var.environment} Memory Utilization"
+  alarm_name                = "${var.service_name}-${var.environment} Memory Utilization"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = each.value.evaluation_periods
   metric_name               = "MemoryUtilization"
@@ -30,21 +27,18 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_memory_utilization" {
   statistic                 = "Average"
   threshold                 = each.value.threshold
   alarm_description         = "This alarm is used to detect high Memory utilization for the ECS service. Consistent high Memory utilization can indicate a resource bottleneck or application performance problems."
-  alarm_actions             = local.alarm_notifications
-  ok_actions                = local.ok_notifications
   insufficient_data_actions = []
-  treat_missing_data        = var.treat_missing_data
+  treat_missing_data        = "notBreaching"
   dimensions = {
     ClusterName = var.ecs_cluster_name
-    ServiceName = each.key
+    ServiceName = var.service_name
   }
 }
 
 
 
 resource "aws_cloudwatch_metric_alarm" "ecs_target_response_time" {
-  for_each                  = { for ecs in var.ecs : ecs.name => ecs.target_response_time }
-  alarm_name                = "${each.key}-${var.environment} Target Response Time"
+  alarm_name                = "${var.service_name}-${var.environment} Target Response Time"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = each.value.evaluation_periods
   metric_name               = "TargetResponseTime"
@@ -53,28 +47,23 @@ resource "aws_cloudwatch_metric_alarm" "ecs_target_response_time" {
   statistic                 = "Average"
   threshold                 = each.value.threshold
   alarm_description         = "This alarm helps you detect a high target response time for ECS service requests. This can indicate that there are problems that cause the service to be unable to serve requests in time."
-  alarm_actions             = local.alarm_notifications
-  ok_actions                = local.ok_notifications
   insufficient_data_actions = []
-  treat_missing_data        = var.treat_missing_data
+  treat_missing_data        = "notBreaching"
   dimensions = {
     ClusterName = var.ecs_cluster_name
-    ServiceName = each.key
+    ServiceName = var.service_name
   }
 }
 
 
 resource "aws_cloudwatch_metric_alarm" "ecs_service_error_rate" {
-  for_each                  = { for ecs in var.ecs : ecs.name => ecs.error_rate }
-  alarm_name                = "${each.key}-${var.environment} Error Rate"
+  alarm_name                = "${var.service_name}-${var.environment} Error Rate"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = each.value.evaluation_periods
   threshold                 = each.value.threshold
   alarm_description         = "This alarm helps you detect a high server-side error count for the ECS service. This can indicate that there are errors that cause the server to be unable to serve requests."
-  alarm_actions             = local.alarm_notifications
-  ok_actions                = local.ok_notifications
   insufficient_data_actions = []
-  treat_missing_data        = var.treat_missing_data
+  treat_missing_data        = "notBreaching"
 
   metric_query {
     id          = "e1"
@@ -95,7 +84,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_error_rate" {
 
       dimensions = {
         ClusterName = var.ecs_cluster_name
-        ServiceName = each.key
+        ServiceName = var.service_name
       }
     }
   }
@@ -112,7 +101,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_error_rate" {
 
       dimensions = {
         ClusterName = var.ecs_cluster_name
-        ServiceName = each.key
+        ServiceName = var.service_name
       }
     }
   }
@@ -120,16 +109,13 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_error_rate" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "alb_alarm" {
-  for_each                  = { for alb in var.alb : alb.name => alb.error_rate }
-  alarm_name                = "${each.key}-${var.environment}-error-rate"
+  alarm_name                = "${aws_lb.alb.name}-${var.environment}-error-rate"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = each.value.evaluation_periods
   threshold                 = each.value.percentage
   alarm_description         = "Request error rate has exceeded ${each.value.percentage}%"
-  alarm_actions             = local.alarm_notifications
-  ok_actions                = local.ok_notifications
   insufficient_data_actions = []
-  treat_missing_data        = var.treat_missing_data
+  treat_missing_data        = "notBreaching"
 
   metric_query {
     id          = "e1"
@@ -149,7 +135,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_alarm" {
       unit        = "Count"
 
       dimensions = {
-        LoadBalancer = each.key
+        LoadBalancer = aws_lb.alb.name
       }
     }
   }
@@ -165,7 +151,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_alarm" {
       unit        = "Count"
 
       dimensions = {
-        LoadBalancer = each.key
+        LoadBalancer = aws_lb.alb.name
       }
     }
   }
