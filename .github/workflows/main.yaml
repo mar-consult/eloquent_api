@@ -1,4 +1,4 @@
-name: Lookup API
+name: Eloquent APP
 on:
   push:
     branches:
@@ -37,20 +37,33 @@ jobs:
       
       - name: Install Pipenv
         run: pip install pipenv --user
+        working-directory: ./app
 
       - name: Run Security Check on code
         run: make security
+        working-directory: ./app
       
       - name: Build an image
-        run: docker build -t lookup-app:${{ github.sha }} .
+        run: docker build -t eloquent:${{ github.sha }} .
+        working-directory: ./app
       
-      - name: Run Trivy vulnerability scanner
+      - name: Run Trivy vulnerability scanner on Container Image
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'lookup-app:${{ github.sha }}'
+          image-ref: 'eloquent:${{ github.sha }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-        
+      
+      - name: Run Trivy vulnerability scanner on Terraform Code
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'
+          scan-ref: './terraform'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
