@@ -85,15 +85,3 @@ resource "aws_lb_target_group" "eloquent" {
     name = "${var.service_name}-tg"
   }
 }
-
-resource "aws_lb_listener_rule" "listener" {
-  listener_arn = var.alb_listener_arn
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.eloquent.arn
-  }
-
-  depends_on = [aws_lb_target_group.eloquent]
-
-}
