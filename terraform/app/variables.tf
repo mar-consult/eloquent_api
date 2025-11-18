@@ -1,4 +1,5 @@
 variable "vpc_name" {type = string}
+variable "environment" {type = string}
 variable "vpc_cidr_block" {type = string}
 variable "region" {type = string}
 variable "ecs_cluster_name" {type = string}
