@@ -58,7 +58,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
   
   build_and_push:
-    needs: security-checks
+    needs: security_checks
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
