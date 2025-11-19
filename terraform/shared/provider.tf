@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     encrypt = true
-    bucket  = "eloquent-dev-bucket-tfstate"
+    bucket  = "eloquent-ai-dev-bucket-tfstate"
     key     = "shared/terraform.tfstate"
     region  = "us-east-1"
   }
