@@ -1,2 +1,38 @@
+name: 'Terraform CI/CD'
 
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
 
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  shared_terraform_plan:
+    runs-on: ubuntu-latest
+    name: "Shared Terraform Plan"
+    steps:
+      - name: Terraform Plan
+        uses: ./.github/actions/terraform_plan
+        with:
+          role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
+          working_dir: "./terraform/shared"
+          environment: shared
+  shared_terraform_apply:
+    needs: shared_terraform_plan
+    runs-on: ubuntu-latest
+    name: "Shared Terraform Apply"
+    steps:
+      - name: Terraform Plan
+        uses: ./.github/actions/terraform_plan
+        with:
+          role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
+          working_dir: "./terraform/shared"
+          environment: shared
