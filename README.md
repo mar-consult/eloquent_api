@@ -302,8 +302,3 @@ The API should now be accessible at `http://localhost:8080`.
 
   * **Secrets Management:** Integrate **AWS Secrets Manager** to store and retrieve database credentials and sensitive environment variables securely.
   * **WAF Protection:** Deploy **AWS WAF** in front of the **ALB** to mitigate common web application attacks (e.g., SQL injection, XSS).
-  
-
-## 📄 License
-
-(Add your license information here, such as: "This project is licensed under the MIT License.")
