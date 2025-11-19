@@ -1,0 +1,16 @@
+service_name                     = "eloquent-app"
+region                           = "us-east-1"
+environment                      = "dev"
+service_port                     = 8080
+replica_count                    = 1
+mem                              = 2048
+cpu                              = 1024
+min_healthy_percent              = 50
+max_healthy_percent              = 200
+cloudwatch_log_retention_in_days = 7
+is_internal                      = false
+enable_https                     = false
+enable_http                      = true
+enable_https_redirection         = false
+allow_ingress_lb_cidr_block      = ["0.0.0.0/0"]
+image_tag                        = "latest"

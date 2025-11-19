@@ -1,6 +1,9 @@
 terraform {
   backend "s3" {
     encrypt = true
+    bucket  = "eloquent-dev-bucket-tfstate"
+    key     = "shared/terraform.tfstate"
+    region  = "us-east-1"
   }
   required_providers {
     aws = {
@@ -15,7 +18,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Environment = var.environment
+      Environment = "shared"
       Managed_by  = "Terraform"
     }
   }

@@ -1,5 +1,5 @@
 resource "aws_security_group" "ecr_vpc_endpoint_sg" {
-  name        = "${var.name}-vpc-endpoint-sg"
+  name        = "${var.environment}-${var.name}-vpc-endpoint-sg"
   description = "Security group for ECR VPC Endpoints"
   vpc_id      = aws_vpc.vpc.id
 
@@ -15,6 +15,10 @@ resource "aws_security_group" "ecr_vpc_endpoint_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.environment}-${var.name}-vpc-endpoint-sg"
   }
 }
 

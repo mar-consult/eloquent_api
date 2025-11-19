@@ -3,6 +3,15 @@ variable "name" {
   description = "VPC name"
 }
 
+variable "environment" {
+  type        = string
+  description = "Environment name"
+}
+
+variable "enable_container_insights" {
+  type        = bool
+  description = "Whether to enable or not container insights"
+}
 variable "region" {
   type = string
 }

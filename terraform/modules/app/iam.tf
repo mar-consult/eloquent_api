@@ -1,9 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-locals {
-  account_id = data.aws_caller_identity.current.account_id
-}
-
 data "aws_iam_policy_document" "ecs_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -16,10 +10,10 @@ data "aws_iam_policy_document" "ecs_assume_role_policy" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name               = "${var.service_name}-task-execution-role"
+  name               = "${local.service_name}-task-execution-role"
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
   tags = {
-    Name = "${var.service_name}-task-execution-role"
+    Name = "${local.service_name}-task-execution-role"
   }
 }
 

@@ -1,8 +1,8 @@
 resource "aws_lb" "alb" {
-  name                             = "${var.service_name}-alb"
+  name                             = "${local.service_name}-alb"
   internal                         = var.is_internal
   load_balancer_type               = "application"
-  subnets                          = var.is_internal ? var.public_subnet_ids : var.private_subnet_ids
+  subnets                          = var.is_internal ? local.public_subnets : local.private_subnets
   enable_cross_zone_load_balancing = true
   security_groups                  = [aws_security_group.sg_service_alb.id]
   enable_deletion_protection       = true
@@ -14,7 +14,7 @@ resource "aws_lb" "alb" {
   }
 
   tags = {
-    Name = "${var.service_name}-alb"
+    Name = "${local.service_name}-alb"
   }
 }
 
@@ -27,8 +27,8 @@ resource "aws_lb_listener" "http" {
   dynamic "default_action" {
     for_each = var.enable_https_redirection ? [] : [1]
     content {
-     type             = "forward"
-     target_group_arn = aws_lb_target_group.eloquent.arn 
+      type             = "forward"
+      target_group_arn = aws_lb_target_group.eloquent.arn
     }
   }
 
@@ -43,7 +43,7 @@ resource "aws_lb_listener" "http" {
         status_code = "HTTP_301"
       }
     }
-    
+
   }
 }
 
@@ -57,6 +57,6 @@ resource "aws_lb_listener" "https_listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.eloquent.arn 
+    target_group_arn = aws_lb_target_group.eloquent.arn
   }
 }

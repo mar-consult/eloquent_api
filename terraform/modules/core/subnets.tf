@@ -1,29 +1,31 @@
 resource "aws_subnet" "private" {
-  count = length(var.private_subnets)
+  for_each = { for s in var.private_subnets : s.cidr_block => s }
 
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnets[count.index].cidr_block
-  availability_zone = var.private_subnets[count.index].availability_zone
+  cidr_block        = each.key
+  availability_zone = each.value.availability_zone
 
   tags = {
-    Name = "${var.name}-subnet-${var.private_subnets[count.index].name}"
+    Name = "${var.environment}-${var.name}-${each.value.name}"
   }
 }
 
 resource "aws_subnet" "public" {
-  count = length(var.public_subnets)
+  for_each = { for s in var.public_subnets : s.availability_zone => s }
 
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.public_subnets[count.index].cidr_block
-  availability_zone       = var.public_subnets[count.index].availability_zone
+  cidr_block              = each.value.cidr_block
+  availability_zone       = each.key
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.name}-subnet-${var.public_subnets[count.index].name}"
+    Name = "${var.environment}-${var.name}-${each.value.name}"
   }
 }
 
 locals {
-  private_subnet_ids   = aws_subnet.private.*.id
-  public_subnet_ids    = aws_subnet.public.*.id
+  private_subnet_ids   = [for s in aws_subnet.private : s.id]
+  public_subnet_ids    = [for s in aws_subnet.public : s.id]
+  public_subnet_cidrs  = [for s in aws_subnet.public : s.cidr_block]
+  private_subnet_cidrs = [for s in aws_subnet.private : s.cidr_block]
 }

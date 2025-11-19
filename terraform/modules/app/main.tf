@@ -4,21 +4,22 @@ locals {
   health_check_path                = "/health"
   health_check_healthy_threshold   = 2
   health_check_unhealthy_threshold = 5
-
+  service_name                     = "${var.environment}-${var.service_name}"
 
 }
 
 resource "aws_ecs_task_definition" "task" {
-  family                   = var.service_name
+  family                   = local.service_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
   memory                   = var.mem
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
-    name      = var.service_name
-    image     = var.ecr_url
+    name      = local.service_name
+    image     = "${local.repository_url}:${var.image_tag}"
     essential = true
+
 
     environment = var.environment_variables
     portMappings = [
@@ -34,21 +35,21 @@ resource "aws_ecs_task_definition" "task" {
 
       options = {
         "awslogs-region"        = var.region
-        "awslogs-group"         = aws_cloudwatch_log_group.ecs_log_group.name
-        "awslogs-stream-prefix" = var.service_name
+        "awslogs-group"         = aws_cloudwatch_log_group.log_group.name
+        "awslogs-stream-prefix" = local.service_name
       }
     }
 
   }])
 
   tags = {
-    name = "${var.service_name}-task-definition"
+    Name = "${local.service_name}-task-definition"
   }
 }
 
 resource "aws_ecs_service" "service" {
-  name            = var.service_name
-  cluster         = var.ecs_cluster_id
+  name            = local.service_name
+  cluster         = local.cluster_id
   task_definition = aws_ecs_task_definition.task.arn
   launch_type     = "FARGATE"
 
@@ -58,18 +59,18 @@ resource "aws_ecs_service" "service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.eloquent.arn
-    container_name   = var.service_name
+    container_name   = local.service_name
     container_port   = var.service_port
   }
 
-   service_registries {
+  service_registries {
     registry_arn   = aws_service_discovery_service.eloquent.arn
-    container_name = var.service_name
+    container_name = local.service_name
   }
 
   network_configuration {
     security_groups  = [aws_security_group.sg_service.id]
-    subnets          = var.private_subnet_ids
+    subnets          = local.private_subnets
     assign_public_ip = false
   }
 
@@ -78,6 +79,6 @@ resource "aws_ecs_service" "service" {
   }
 
   tags = {
-    name = "${var.service_name}-service"
+    Name = local.service_name
   }
 }

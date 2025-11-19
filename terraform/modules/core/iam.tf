@@ -14,7 +14,7 @@ resource "aws_iam_role" "flow_logs_role" {
   name               = "vpc-flow-logs-role"
   assume_role_policy = data.aws_iam_policy_document.flow_logs_assume_policy.json
   tags = {
-    Name = "${var.name}-iam-vpc-flow-logs-role"
+    Name = "${var.environment}-${var.name}-iam-vpc-flow-logs-role"
   }
 }
 

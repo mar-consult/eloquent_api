@@ -9,14 +9,14 @@ output "vpc_cidr_block" {
 output "public_subnets" {
   value = {
     ids         = local.public_subnet_ids
-    cidr_blocks = aws_subnet.public.*.cidr_block
+    cidr_blocks = local.public_subnet_cidrs
   }
 }
 
 output "private_subnets" {
   value = {
     ids         = local.private_subnet_ids
-    cidr_blocks = aws_subnet.private.*.cidr_block
+    cidr_blocks = local.private_subnet_cidrs
   }
 }
 
