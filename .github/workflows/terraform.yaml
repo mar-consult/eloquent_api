@@ -32,6 +32,21 @@ jobs:
     needs: shared_terraform_plan
     runs-on: ubuntu-latest
     name: "Shared Terraform Apply"
+    environment: Deploy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Terraform Plan
+        uses: ./.github/actions/terraform_apply
+        with:
+          role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
+          working_dir: "./terraform/shared"
+          environment: shared
+  
+  core_terraform_plan:
+    needs: shared_terraform_apply
+    runs-on: ubuntu-latest
+    name: "Core Terraform Plan"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,5 +54,47 @@ jobs:
         uses: ./.github/actions/terraform_plan
         with:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
-          working_dir: "./terraform/shared"
-          environment: shared
+          working_dir: "./terraform/core"
+          environment: ${{ inputs.environment }}
+  core_terraform_apply:
+    needs: core_terraform_plan
+    runs-on: ubuntu-latest
+    name: "Core Terraform Apply"
+    environment: Deploy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Terraform Plan
+        uses: ./.github/actions/terraform_apply
+        with:
+          role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
+          working_dir: "./terraform/core"
+          environment: ${{ inputs.environment }}
+  
+  app_terraform_plan:
+    needs: core_terraform_apply
+    runs-on: ubuntu-latest
+    name: "App Terraform Plan"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Terraform Plan
+        uses: ./.github/actions/terraform_plan
+        with:
+          role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
+          working_dir: "./terraform/app"
+          environment: ${{ inputs.environment }}
+  app_terraform_apply:
+    needs: app_terraform_plan
+    runs-on: ubuntu-latest
+    name: "App Terraform Apply"
+    environment: Deploy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Terraform Plan
+        uses: ./.github/actions/terraform_apply
+        with:
+          role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
+          working_dir: "./terraform/app"
+          environment: ${{ inputs.environment }}
