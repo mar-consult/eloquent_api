@@ -40,6 +40,7 @@ To deploy and run this project, you will need the following tools installed and 
 4.  **Terraform CLI** (v1.0+) (for infrastructure management)
 5.  **AWS CLI** (configured with appropriate credentials)
 6.  **Python** (for application code inspection/development)
+7.  **S3 State Bucket** (to store state files for terraform)
 
 ## ☁️ AWS Deployment (Terraform)
 
