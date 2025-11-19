@@ -32,7 +32,6 @@ jobs:
     needs: shared_terraform_plan
     runs-on: ubuntu-latest
     name: "Shared Terraform Apply"
-    environment: Deploy
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
