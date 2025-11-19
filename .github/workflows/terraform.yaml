@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Terraform Plan
         uses: ./.github/actions/terraform_plan
-        with:
+        env:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/shared"
           environment: shared
@@ -32,12 +32,13 @@ jobs:
     needs: shared_terraform_plan
     runs-on: ubuntu-latest
     name: "Shared Terraform Apply"
+    environment: Deploy
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Terraform Apply
         uses: ./.github/actions/terraform_apply
-        with:
+        env:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/shared"
           environment: shared
@@ -51,7 +52,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Terraform Plan
         uses: ./.github/actions/terraform_plan
-        with:
+        env:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/core"
           environment: ${{ inputs.environment }}
@@ -65,7 +66,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Terraform Apply
         uses: ./.github/actions/terraform_apply
-        with:
+        env:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/core"
           environment: ${{ inputs.environment }}
@@ -79,7 +80,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Terraform Plan
         uses: ./.github/actions/terraform_plan
-        with:
+        env:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/app"
           environment: ${{ inputs.environment }}
@@ -93,7 +94,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Terraform Apply
         uses: ./.github/actions/terraform_apply
-        with:
+        env:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/app"
           environment: ${{ inputs.environment }}

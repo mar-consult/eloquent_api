@@ -1,15 +1,5 @@
 name: 'Terraform Apply'
 description: 'Reusable Action'
-inputs:
-  role_arn:
-    description: "Role to be used"
-    required: true
-  working_dir:
-    description: "Location of terraform files"
-    required: true
-  environment:
-    description: "Name of the environment"
-    required: true
 
 runs:
   using: "composite"
@@ -20,7 +10,7 @@ runs:
     - name: Configure AWS credentials from AWS account
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: ${{ inputs.role_arn }}
+        role-to-assume: ${{ env.role_arn }}
         role-session-name: github_action
         aws-region: us-east-1
 
@@ -28,11 +18,11 @@ runs:
       uses: hashicorp/setup-terraform@v3
 
     - name: Terraform Init
-      run: make init ENV=${{ inputs.environment }}
-      working-directory: ${{ inputs.working_dir }}
+      run: make init ENV=${{ env.environment }}
+      working-directory: ${{ env.working_dir }}
       shell: bash
 
     - name: Terraform Apply
-      run: make apply ENV=${{ inputs.environment }}
-      working-directory: ${{ inputs.working_dir }}
+      run: make apply ENV=${{ env.environment }}
+      working-directory: ${{ env.working_dir }}
       shell: bash
