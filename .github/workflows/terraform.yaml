@@ -22,7 +22,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Terraform Plan
-        uses: ./.github/actions/terraform_plan
+        uses: .github/actions/terraform_plan
         with:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/shared"
@@ -35,7 +35,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Terraform Plan
-        uses: ./.github/actions/terraform_plan
+        uses: .github/actions/terraform_plan
         with:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
           working_dir: "./terraform/shared"
