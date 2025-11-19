@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Terraform Plan
+      - name: Terraform Apply
         uses: ./.github/actions/terraform_apply
         with:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
@@ -64,7 +64,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Terraform Plan
+      - name: Terraform Apply
         uses: ./.github/actions/terraform_apply
         with:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
@@ -92,7 +92,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Terraform Plan
+      - name: Terraform Apply
         uses: ./.github/actions/terraform_apply
         with:
           role_arn: "arn:aws:iam::951296734763:role/github-actions-role"
