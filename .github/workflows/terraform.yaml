@@ -11,6 +11,10 @@ on:
         options:
           - dev
 
+concurrency:
+  group: ${{ inputs.environment }}
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: read
