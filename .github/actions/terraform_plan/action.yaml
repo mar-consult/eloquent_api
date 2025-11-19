@@ -20,7 +20,7 @@ runs:
     - name: Configure AWS credentials from AWS account
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: ${{.inputs.role_arn }}
+        role-to-assume: ${{ inputs.role_arn }}
         role-session-name: github_action
         aws-region: us-east-1
 
