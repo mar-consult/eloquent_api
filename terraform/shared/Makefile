@@ -21,3 +21,8 @@ apply: init	## apply terraform
 	@printf "\n\n++++++++++++++ STARTING apply ++++++++++++++++++\n";
 	terraform apply -auto-approve
 	@printf "++++++++++++++ DONE WITH apply ++++++++++++++++++\n";
+
+destroy: init	## destroy terraform
+	@printf "\n\n++++++++++++++ STARTING destroy ++++++++++++++++++\n";
+	terraform destroy -auto-approve
+	@printf "++++++++++++++ DONE WITH destroy ++++++++++++++++++\n";

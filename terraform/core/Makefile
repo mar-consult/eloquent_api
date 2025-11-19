@@ -21,3 +21,8 @@ apply: init	## apply terraform
 	@printf "\n\n++++++++++++++ STARTING apply ++++++++++++++++++\n";
 	terraform apply --var-file=./environments/vars/$(ENV).tfvars -auto-approve
 	@printf "++++++++++++++ DONE WITH apply ++++++++++++++++++\n";
+
+destroy: init	## destroy terraform
+	@printf "\n\n++++++++++++++ STARTING destroy ++++++++++++++++++\n";
+	terraform destroy --var-file=./environments/vars/$(ENV).tfvars -auto-approve
+	@printf "++++++++++++++ DONE WITH destroy ++++++++++++++++++\n";
