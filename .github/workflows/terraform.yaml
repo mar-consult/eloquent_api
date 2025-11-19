@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     name: "Shared Terraform Plan"
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Terraform Plan
         uses: ./.github/actions/terraform_plan
         with:
@@ -30,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     name: "Shared Terraform Apply"
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Terraform Plan
         uses: ./.github/actions/terraform_plan
         with:
