@@ -23,5 +23,3 @@ variable "enable_container_insights" {
   type    = bool
   default = false
 }
-
-variable "role_arn" {type = string}

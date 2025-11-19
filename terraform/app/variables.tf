@@ -76,5 +76,3 @@ variable "image_tag" {
   type        = string
   description = "Image stored on ECR"
 }
-
-variable "role_arn" {type = string}

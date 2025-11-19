@@ -29,24 +29,18 @@ runs:
 
     - name: Terraform Init
       id: init
-      env:
-        TF_VAR_role_arn: ${{ inputs.role_arn }}
       run: make init ENV=${{ inputs.environment }}
       working-directory: ${{ inputs.working_dir }}
       shell: bash
 
     - name: Terraform Validation
       id: validate
-      env:
-        TF_VAR_role_arn: ${{ inputs.role_arn }}
       run: terraform validate
       working-directory: ${{ inputs.working_dir }}
       shell: bash
 
     - name: Terraform Plan
       id: plan
-      env:
-        TF_VAR_role_arn: ${{ inputs.role_arn }}
       run: make plan ENV=${{ inputs.environment }}
       working-directory: ${{ inputs.working_dir }}
       shell: bash
