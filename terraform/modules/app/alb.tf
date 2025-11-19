@@ -2,7 +2,7 @@ resource "aws_lb" "alb" {
   name                             = "${local.service_name}-alb"
   internal                         = var.is_internal
   load_balancer_type               = "application"
-  subnets                          = var.is_internal ? local.public_subnets : local.private_subnets
+  subnets                          = var.is_internal ? local.private_subnets : local.public_subnets
   enable_cross_zone_load_balancing = true
   security_groups                  = [aws_security_group.sg_service_alb.id]
   enable_deletion_protection       = true
