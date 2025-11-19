@@ -112,7 +112,7 @@ jobs:
       - name: Replace APP_VERSION value
         run: |
           current=$(jq -r '.containerDefinitions[] | select(.name == "dev-eloquent-app") | .environment[] | select(.name == "APP_VERSION") | .value' task-definition.json)
-          sed -i "s/$current/${{ github.sha }}" task-definition.json
+          sed -i "s/$current/${{ github.sha }}/" task-definition.json
       
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
