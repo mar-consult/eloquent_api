@@ -11,8 +11,9 @@ on:
         options:
           - dev
 
-env:
-  AWS_REGION: us-east-1
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   shared_terraform_plan:
