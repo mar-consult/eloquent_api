@@ -1,3 +1,6 @@
 bucket  = "eloquent-ai-dev-bucket-tfstate"
 key     = "app/terraform.tfstate"
 region  = "us-east-1"
+assume_role = {
+  role_arn = "arn:aws:iam::951296734763:role/github-actions-role"
+}

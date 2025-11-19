@@ -28,11 +28,15 @@ runs:
       uses: hashicorp/setup-terraform@v3
 
     - name: Terraform Init
+      env:
+          TF_VAR_role_arn: ${{ inputs.role_arn }}
       run: make init ENV=${{ inputs.environment }}
       working-directory: ${{ inputs.working_dir }}
       shell: bash
 
     - name: Terraform Apply
+      env:
+        TF_VAR_role_arn: ${{ inputs.role_arn }}
       run: make apply ENV=${{ inputs.environment }}
       working-directory: ${{ inputs.working_dir }}
       shell: bash
