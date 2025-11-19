@@ -2,40 +2,45 @@ name: 'Terraform Plan'
 description: 'Reusable Action'
 inputs:
   role_arn:
+    description: "Role to be used"
     required: true
   working_dir:
+    description: "Location of terraform files"
     required: true
   environment:
+    description: "Name of the environment"
     required: true
 
 runs:
   using: "composite"
-jobs:
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Configure AWS credentials from AWS account
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{.inputs.role_arn }}
-          role-session-name: github_action
-          aws-region: us-east-1
+    - name: Configure AWS credentials from AWS account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{.inputs.role_arn }}
+        role-session-name: github_action
+        aws-region: us-east-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
-        id: init
-        run: make init ENV=${{ inputs.environment }}
-        working-directory: ${{ inputs.working_dir }}
+    - name: Terraform Init
+      id: init
+      run: make init ENV=${{ inputs.environment }}
+      working-directory: ${{ inputs.working_dir }}
+      shell: bash
 
-      - name: Terraform Validation
-        id: validate
-        run: terraform validate
-        working-directory: ${{ inputs.working_dir }}
+    - name: Terraform Validation
+      id: validate
+      run: terraform validate
+      working-directory: ${{ inputs.working_dir }}
+      shell: bash
 
-      - name: Terraform Plan
-        id: plan
-        run: make plan ENV=${{ inputs.environment }}
-        working-directory: ${{ inputs.working_dir }}
+    - name: Terraform Plan
+      id: plan
+      run: make plan ENV=${{ inputs.environment }}
+      working-directory: ${{ inputs.working_dir }}
+      shell: bash

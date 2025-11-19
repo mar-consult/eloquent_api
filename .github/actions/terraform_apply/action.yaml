@@ -2,10 +2,13 @@ name: 'Terraform Apply'
 description: 'Reusable Action'
 inputs:
   role_arn:
+    description: "Role to be used"
     required: true
   working_dir:
+    description: "Location of terraform files"
     required: true
   environment:
+    description: "Name of the environment"
     required: true
 
 runs:
@@ -27,7 +30,9 @@ runs:
     - name: Terraform Init
       run: make init ENV=${{ inputs.environment }}
       working-directory: ${{ inputs.working_dir }}
+      shell: bash
 
     - name: Terraform Apply
       run: make apply ENV=${{ inputs.environment }}
       working-directory: ${{ inputs.working_dir }}
+      shell: bash
